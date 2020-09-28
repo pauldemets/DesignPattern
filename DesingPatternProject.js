@@ -74,36 +74,34 @@ const Video = myNumericFileFactory.createFile('video', { filename: 'videoFile', 
 
 
 
-let readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: '>'
-});
-
-readline.prompt();
-
-let commands = {
+const commands = {
 
     pwd: function () {
         console.log('Tu as fait un pwd');
-        readline.prompt();
     },
-    close: function () {
+    exit: function () {
         console.log('Closing script...');
-        readline.close();
+        process.exit();
     },
     photo: function() {
         console.log('Affichage de la photo :', Photo);
-        readline.prompt();
     }
 };
 
-readline.on('line', (input) => {
-    input = input.toLowerCase();
-    if (input in commands) {
-        commands[input]();
-    } else {
-        console.log('Sorry unknown command...');
-        readline.prompt();
+
+process.stdin.setEncoding('utf-8');
+
+
+process.stdin.on('readable', () => {
+    let chunk;
+    while ((chunk = process.stdin.read()) !== null) {
+        let input = chunk.trim();
+
+        if(input in commands){
+            commands[input]();
+        }
+        else{
+            console.log('Sorry, unknown command...');
+        }
     }
 });
