@@ -58,7 +58,7 @@ const textFile = function (params) {
     }
 };
 
-const fileDisplayInfo = function (numericFileClass) {
+const fileDisplayInfo = function (numericFileClass) { //Decorateur = surcharge des objets files
     this.hasBeenSeen = false;
     this.createdAt = new Date();
 
@@ -66,27 +66,51 @@ const fileDisplayInfo = function (numericFileClass) {
     this.getSize = () => numericFileClass.size;
     this.getType = () => numericFileClass.type;
 
-    this.getDescription = () => ` ${numericFileClass.getDescription()}
-    Created at ${this.createdAt}
-    Has been seen ${this.hasBeenSeen}`;
+
+    this.getDescription = () => {
+        return `${numericFileClass.getDescription()}
+    Created at : ${this.createdAt}
+    Has been seen : ${this.hasBeenSeen} \n`
+    };
 
     this.setSeen = () => this.hasBeenSeen = true;
+    this.getSeen = () => this.hasBeenSeen;
 };
 
 
-const listFiles = function () {
+const listFiles = function () { //--> SINGLETON TODO, objets unique de la liste des files
     this.myList = [];
     this.index = -1;
+    this.counter = 0;
 
     this.addNewFile = function (file) {
         this.myList.push(file);
     }
+
+    this.checkIfSeen= function(file){
+        if(!file.getSeen()){
+            this.counter ++;
+        }
+    }
+
+    this.getFilesCountSeen = function(){
+        return this.counter;
+    }
+
+    this.getSize = function(){
+        return this.myList.length;
+    }
+
     this.showNextFile = function () {
         this.index++;
         if (this.index >= this.myList.length) {
             this.index = 0;
         }
+
+        this.checkIfSeen(this.myList[this.index]);
+    
         console.log(this.myList[this.index].getDescription());
+        this.myList[this.index].setSeen();
     }
     this.showPreviousFile = function () {
         this.index--;
@@ -94,7 +118,10 @@ const listFiles = function () {
         if (this.index < 0) {
             this.index = this.myList.length - 1;
         }
+        this.checkIfSeen(this.myList[this.index]);
+
         console.log(this.myList[this.index].getDescription());
+        this.myList[this.index].setSeen();
     }
 }
 
@@ -141,21 +168,21 @@ myFiles.addNewFile(v1);
 
 
 
-const commands = {
-    pwd: function () {
-        console.log('Tu as fait un pwd');
-        readline.prompt();
-    },
-    exit: function () {
-        console.log('Closing script...');
-        readline.close();
-        process.exit();
-    },
-    photo: function () {
-        console.log('Affichage de la photo :', Photo);
-        readline.prompt();
-    }
-};
+// const commands = {
+//     pwd: function () {
+//         console.log('Tu as fait un pwd');
+//         readline.prompt();
+//     },
+//     exit: function () {
+//         console.log('Closing script...');
+//         readline.close();
+//         process.exit();
+//     },
+//     photo: function () {
+//         console.log('Affichage de la photo :', Photo);
+//         readline.prompt();
+//     }
+// };
 
 var stdin = process.stdin;
 stdin.setRawMode(true);
@@ -176,10 +203,10 @@ stdin.on('data', function (key) {
     else {
         console.log(key);
         if (key == 'e') {
-            console.log('You actualy read 6 files.')
+            console.log(`You actualy read ${myFiles.getFilesCountSeen()} files.`)
         }
         else if (key == 'c') {
-            console.log(`There are ${myFiles.length} files.`)
+            console.log(`There are ${myFiles.getSize()} files.`)
         }
         else {
             console.log('Sorry, unknown command...')
