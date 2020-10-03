@@ -9,7 +9,27 @@
  * 
  */
 
+
 const data = require('./data');
+
+const typesVideoFile = ['avi', 'mp4'];
+const typesSongFile = ['mp3'];
+const typesPhotoFile = ['jpg', 'png'];
+const typesTextFile = ['docx', 'pdf'];
+
+
+
+/**
+ * Fonction qui permet de créer une tache asynchrone
+ * pour créer les deux ficher après 30 sec
+ */
+const setAsyncTimeout = (cb, timeout = 0) => new Promise(resolve => {
+    setTimeout(() => {
+        cb();
+        resolve();
+    }, timeout);
+});
+
 
 const photoFile = function (params) {
     const { filename, size, type, pixelNumber } = params;
@@ -174,14 +194,14 @@ const NumericFileFactory = function () { };
 
 NumericFileFactory.prototype.numericFileClass = undefined;
 NumericFileFactory.prototype.createFile = function (type, params = {}) {
-    switch (type) {
-        case photoFile.name: this.numericFileClass = photoFile;
+    switch (true) {
+        case typesPhotoFile.includes(type): this.numericFileClass = photoFile;
             break;
-        case videoFile.name: this.numericFileClass = videoFile;
+        case typesVideoFile.includes(type): this.numericFileClass = videoFile;
             break;
-        case songFile.name: this.numericFileClass = songFile;
+        case typesSongFile.includes(type): this.numericFileClass = songFile;
             break;
-        case textFile.name: this.numericFileClass = textFile;
+        case typesTextFile.includes(type): this.numericFileClass = textFile;
             break;
         default:
             console.log('Error creating objects !');
@@ -191,38 +211,35 @@ NumericFileFactory.prototype.createFile = function (type, params = {}) {
 };
 
 
-/**
- * --------INSTANCIATION--------
- * Ici on va créer tous les objets que l'on doit créer (cf sujet projet)
- */
-const myNumericFileFactory = new NumericFileFactory();
-const photo = myNumericFileFactory.createFile('photoFile', { filename: 'testFile', size: '512MB', type: 'JPEG', pixelNumber: '567k' });
-const song = myNumericFileFactory.createFile('songFile', { filename: 'songTest', size: '1.02GB', type: 'MP3', converted: 'true' });
-const text = myNumericFileFactory.createFile('textFile', { filename: 'textFile', size: '1.02GB', type: 'MP3', encrypted: 'true' });
-const video = myNumericFileFactory.createFile('videoFile', { filename: 'videoFile', size: '1.02GB', type: 'MP3', hd: 'false' });
 
 /**
+ * --------INSTANCIATION--------
+ * Ici on va créer tous les objets que l'on doit créer (cf sujet projet).
  * Après avoir créer les objects on créer les objets avec décorateur
  * pour profiter de plus de méthodes/attributs
  */
-const p1 = new fileDisplayInfo(photo);
-const s1 = new fileDisplayInfo(song);
-const t1 = new fileDisplayInfo(text);
-const v1 = new fileDisplayInfo(video);
+const myNumericFileFactory = new NumericFileFactory();
+data.files().forEach(element => {
+    const newObj = myNumericFileFactory.createFile(element.type, element);
+    listFiles.get().addNewFile(new fileDisplayInfo(newObj));
+});
+
 
 /**
- * On ajoute les objets dans la liste
+ * Ici on ajoute les deux dernier fichiers 30secondes après le lancement
+ * du script.
  */
-listFiles.get().addNewFile(p1);
-listFiles.get().addNewFile(s1);
-listFiles.get().addNewFile(t1);
-listFiles.get().addNewFile(v1);
+const addLatestFiles = async () => {
+    await setAsyncTimeout(() => {
+        console.log('-- Adding 2 latest files... --');
+        data.latestFiles().forEach(element => {
+            const newObj = myNumericFileFactory.createFile(element.type, element);
+            listFiles.get().addNewFile(new fileDisplayInfo(newObj));
+        });
+    }, 30000);
+};
+addLatestFiles();
 
-console.log(data.files());
-
-data.files().forEach(element => {
-    console.log('Element :',element);
-});
 
 /**
  * --------CLI--------

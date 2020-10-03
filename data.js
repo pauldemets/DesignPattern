@@ -1,5 +1,4 @@
 module.exports = {
-
     files: function () {
         return [{
             filename: 'surf_at_lacanau.jpg',
@@ -73,7 +72,20 @@ module.exports = {
             type: 'mp4',
             hd: true,
         }];
+    },
+    latestFiles: function () {
+        return [{
+            filename: 'last_ski_session.jpg',
+            size: 4424,
+            type: 'jpg',
+            pixelNumber: 4000,
+        },
+        {
+            filename: 'dems.mp3',
+            size: 7024,
+            type: 'mp3',
+            converted: false,
+        }]
     }
-    
 }
 
