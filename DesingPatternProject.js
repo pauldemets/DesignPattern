@@ -9,6 +9,8 @@
  * 
  */
 
+const data = require('./data');
+
 const photoFile = function (params) {
     const { filename, size, type, pixelNumber } = params;
     this.filename = filename;
@@ -189,7 +191,6 @@ NumericFileFactory.prototype.createFile = function (type, params = {}) {
 };
 
 
-
 /**
  * --------INSTANCIATION--------
  * Ici on va créer tous les objets que l'on doit créer (cf sujet projet)
@@ -216,6 +217,12 @@ listFiles.get().addNewFile(p1);
 listFiles.get().addNewFile(s1);
 listFiles.get().addNewFile(t1);
 listFiles.get().addNewFile(v1);
+
+console.log(data.files());
+
+data.files().forEach(element => {
+    console.log('Element :',element);
+});
 
 /**
  * --------CLI--------
@@ -259,4 +266,3 @@ stdin.on('data', function (key) {
             break;
     }
 });
-
