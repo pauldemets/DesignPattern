@@ -3,7 +3,7 @@ const controller = require('./controller');
 
 module.exports = {
     start: function () {
-        
+
         /**
          * --------CLI--------
          * Mise en place de l'interface en ligne de commande
@@ -31,18 +31,21 @@ module.exports = {
                     break;
                 //CTRL + C
                 case '\u0003':
-                    console.log("Ending of script...")
+                    console.log("> Ending of script...")
                     process.exit();
                     break;
                 case 'e':
-                    console.log(`You actualy read ${controller.listFiles.get().getFilesCountSeen()} files.`)
+                    console.log(`> You actualy read ${controller.listFiles.get().getFilesCountSeen()} files.`)
                     break;
                 case 'c':
-                    console.log(`There are ${controller.listFiles.get().getSize()} files.`)
+                    console.log(`> There are ${controller.listFiles.get().getSize()} files.`)
+                    break;
+                case 'h':
+                    console.log('>' + controller.listFiles.get().showHelp());
                     break;
 
                 default:
-                    console.log('Sorry, unknown command...')
+                    console.log('> Sorry, unknown command...')
                     break;
             }
         });

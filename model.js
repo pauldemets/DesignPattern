@@ -30,7 +30,6 @@ const photoFile = function (params) {
     this.getDescription = function () {
         return `Fichier: ${this.filename}; Type : ${this.type};  Size: ${this.size}; Pixels number: ${this.pixelNumber}`
     };
-
 };
 
 const videoFile = function (params) {
@@ -70,6 +69,8 @@ const textFile = function (params) {
 };
 
 
+
+
 const fileDisplayInfo = function (numericFileClass) { //Decorateur = surcharge des objets files
     var hasBeenSeen = false;
     var createdAt = new Date();
@@ -77,13 +78,17 @@ const fileDisplayInfo = function (numericFileClass) { //Decorateur = surcharge d
 
     this.getDescription = () => {
         return `${myNumericFileClass.getDescription()}
-        Createeed at : ${createdAt}
+        Created at : ${createdAt}
         Has been seen : ${hasBeenSeen} \n`;
     };
 
     this.setSeen = () => hasBeenSeen = true;
     this.getSeen = () => hasBeenSeen;
+    this.getDateCreated = () => createdAt;
 };
+
+
+
 
 /**
  * --------FACTORY--------
