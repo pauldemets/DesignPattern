@@ -69,25 +69,21 @@ const textFile = function (params) {
     }
 };
 
+
 const fileDisplayInfo = function (numericFileClass) { //Decorateur = surcharge des objets files
-    this.hasBeenSeen = false;
-    this.createdAt = new Date();
-
-    this.getFileName = () => numericFileClass.filename;
-    this.getSize = () => numericFileClass.size;
-    this.getType = () => numericFileClass.type;
-
+    var hasBeenSeen = false;
+    var createdAt = new Date();
+    var myNumericFileClass = numericFileClass;
 
     this.getDescription = () => {
-        return `${numericFileClass.getDescription()}
-Created at : ${this.createdAt}
-Has been seen : ${this.hasBeenSeen} \n`
+        return `${myNumericFileClass.getDescription()}
+        Createeed at : ${createdAt}
+        Has been seen : ${hasBeenSeen} \n`;
     };
 
-    this.setSeen = () => this.hasBeenSeen = true;
-    this.getSeen = () => this.hasBeenSeen;
+    this.setSeen = () => hasBeenSeen = true;
+    this.getSeen = () => hasBeenSeen;
 };
-
 
 /**
  * --------FACTORY--------
@@ -132,7 +128,6 @@ module.exports = {
             const newObj = myNumericFileFactory.createFile(element.type, element);
             controller.listFiles.get().addNewFile(new fileDisplayInfo(newObj));
         });
-
 
         /**
          * Ici on ajoute les deux dernier fichiers 30secondes après le lancement

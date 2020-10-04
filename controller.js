@@ -2,7 +2,7 @@ module.exports = {
 
     /**
     * --------SINGLETON--------
-    * Objet qui représente la liste de tous les fichier
+    * Objet qui représente la liste de tous les fichiers
     * on va pouvoir effectuer différentes actions sur cette liste comme  : 
     * 
     * - ajouter un fichier dans la liste (addNewFile)

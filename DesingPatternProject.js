@@ -1,6 +1,6 @@
 /**
  * 
- * Au moins une Facory -- OK
+ * Au moins une Factory -- OK
  * Au moins un Singletton -- OK
  * Au moins un Constructor -- OK
  * Au moins une Facade
